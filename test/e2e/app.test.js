@@ -115,12 +115,34 @@ describe('Aircraft E2E test', () => {
     });
 
 
-    // it('creates an aircraft on post', () => {
-    //     return request(app)
-    //         .post('/api/aircrafts')
-    //         .send({ type: 'A-10', nickname: 'Thunderbird', speed: 439, released: 1977, active: true })
-    //         .then(res => expect(res.body).toEqual({ _id: expect.any(String), type: 'A-10', nickname: 'Thunderbird', speed: 439, released: 1977, active: true }));
-    // });
+    it('creates an aircraft on post', () => {
+
+        const a10 = {
+            name: {
+                official: 'A-10',
+                nickname: 'Thunderbolt II',
+                variants: ['A-10A', 'A-10B', 'A-10C', 'OA-10A']
+            },
+            specs: {
+                type: ['close air support'],
+                armament: {
+                    gun: 'GAU-8/A Avenger',
+                    underwing: 8,
+                    underfueselage: 3
+                },
+                speed: 439
+            },
+            history: {
+                released: 1977,
+                active: true
+            }
+        };
+
+        return request(app)
+            .post('/api/aircrafts')
+            .send(a10)
+            .then(res => expect(res.body).toEqual({ _id: expect.any(String), '__v': 0, ...a10 }));
+    });
 
     // it('updates an aircraft on put', () => {
 
