@@ -147,16 +147,7 @@ describe('aircraft model', () => {
             },
             { new: true }
         )
-            .then(receivedAircraft => expect(receivedAircraft.toObject()).toEqual({
-                ...createdAircraft[2], 
-                history: { 
-                    released: 1966, 
-                    active: true },
-                specs: { 
-                    speed: 2500, 
-                    type: ['support'] 
-                } 
-            }));
+            .then(response => expect(response).toMatchObject({ ok: 1 }));
     });
 
     it('sends an aircraft to its final hangar', () => {
