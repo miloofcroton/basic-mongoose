@@ -160,12 +160,12 @@ describe('Aircraft E2E test', () => {
             .then(response => expect(response).toMatchObject({ ok: true }));
     });
 
-    // it('demolishes an aircraft on delete', () => {
-    //     return request(app)
-    //         .delete(`/api/aircrafts/${createdAircrafts[0]._id}`)
-    //         .then(destroyedAircraft => request(app).get(`/api/aircraft/${destroyedAircraft.body._id}`))
-    //         .then(res => expect(res.body).toEqual({}));
-    // });
+    it('demolishes an aircraft on delete', () => {
+        return request(app)
+            .delete(`/api/aircrafts/${createdAircrafts[0]._id}`)
+            .then(destroyedAircraft => request(app).get(`/api/aircraft/${destroyedAircraft.body._id}`))
+            .then(res => expect(res.body).toEqual({}));
+    });
 
 
 });
