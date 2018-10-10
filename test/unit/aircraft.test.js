@@ -116,8 +116,29 @@ describe('aircraft model', () => {
             });
     });
 
-    it('updates an aircraft by id', () => {
+    it('patches an aircraft by id', () => {
         return Aircraft.findOneAndUpdate(
+            { _id: createdAircraft[2]._id }, 
+            { 
+                history: { released: 1966, active: true }, 
+                specs: { speed: 2500, type:['support'] } 
+            },
+            { new: true }
+        )
+            .then(receivedAircraft => expect(receivedAircraft.toObject()).toEqual({
+                ...createdAircraft[2], 
+                history: { 
+                    released: 1966, 
+                    active: true },
+                specs: { 
+                    speed: 2500, 
+                    type: ['support'] 
+                } 
+            }));
+    });
+
+    it('updates an aircraft by id', () => {
+        return Aircraft.replaceOne(
             { _id: createdAircraft[2]._id }, 
             { 
                 ...createdAircraft[2],
@@ -137,11 +158,6 @@ describe('aircraft model', () => {
                 } 
             }));
     });
-
-    // it('patches an aircraft by id', () => {
-    //     return Aircraft.patch(createdAircraft[2]._id, { active: true, speed: 2500 })
-    //         .then(receivedAircraft => expect(receivedAircraft).toEqual({ ...createdAircraft[2], active: true, speed: 2500 }));
-    // });
 
     it('sends an aircraft to its final hangar', () => {
         return Aircraft.deleteOne({ _id: createdAircraft[0]._id })
