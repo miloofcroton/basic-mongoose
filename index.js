@@ -1,15 +1,13 @@
-/* eslint no-console: off */
-
 require('dotenv').config();
+require('../lib/mongoose-connector');
+const { createServer } = require('http');
 const app = require('./lib/app');
-const http = require('http');
 
-const server = http.createServer(app);
+const port = 7890;
 
-const PORT = 7890;
+const server = createServer(app);
 
-server.listen(PORT, () => {
-    console.log('server running on', server.address().port);
+server.listen(port, () => {
+    /* eslint-disable-next-line no-console */
+    console.log(`Listening on ${port}`);
 });
-
-
