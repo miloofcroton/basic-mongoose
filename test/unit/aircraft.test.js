@@ -143,11 +143,13 @@ describe('aircraft model', () => {
     //         .then(receivedAircraft => expect(receivedAircraft).toEqual({ ...createdAircraft[2], active: true, speed: 2500 }));
     // });
 
-    // it('sends an aircraft to its final hangar', () => {
-    //     return Aircraft.delete(createdAircraft[0]._id)
-    //         .then(retiredAircraft => Aircraft.get(retiredAircraft._id))
-    //         .then(receivedAircraft => expect(receivedAircraft).toBeNull());
-    // });
+    it('sends an aircraft to its final hangar', () => {
+        return Aircraft.deleteOne({ _id: createdAircraft[0]._id })
+            .then(retiredAircraft => Aircraft.findById(retiredAircraft._id))
+            .then(receivedAircraft => expect(receivedAircraft).toBeNull());
+    });
 
 });
+
+
 
