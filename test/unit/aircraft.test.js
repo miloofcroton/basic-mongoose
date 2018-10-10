@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Aircraft = require('../../lib/models/Aircraft');
-require('../../lib/mongoose-connector')();
+require('../../lib/connect')();
 
 
 describe('aircraft model', () => {
