@@ -101,7 +101,7 @@ describe('Aircraft E2E test', () => {
             });
     });
 
-    it('gets all aircrafts on get for a specific query', () => {
+    it('gets all aircrafts for a specific query', () => {
         return request(app)
             .get('/api/aircrafts')
             .query({ 'history.active': true })
@@ -110,7 +110,6 @@ describe('Aircraft E2E test', () => {
                 expect(retrievedAircrafts.body).toContainEqual(createdAircrafts[1]);
             });
     });
-
 
     it('creates an aircraft on post', () => {
 
@@ -173,8 +172,7 @@ describe('Aircraft E2E test', () => {
     it('demolishes an aircraft on delete', () => {
         return request(app)
             .delete(`/api/aircrafts/${createdAircrafts[0]._id}`)
-            .then(destroyedAircraft => request(app).get(`/api/aircraft/${destroyedAircraft.body._id}`))
-            .then(res => expect(res.body).toEqual({}));
+            .then(res => expect(res.body).toEqual({ removed: true }));
     });
 
 
