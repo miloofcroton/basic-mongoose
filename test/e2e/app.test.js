@@ -72,31 +72,18 @@ describe('Aircraft E2E test', () => {
         return request(app)
             .post('/api/aircrafts')
             .send(aircraft);
-        //  .then(res => res.body);
     };
 
-    beforeEach(() => {
-        return Aircraft.deleteMany();
+    beforeEach(async() => {
+        await Aircraft.deleteMany();
+        const ca = await Promise.all(aircrafts.map(lockheedMartin));
+        return createdAircrafts = ca.map(a => a.body);
     });
-    beforeEach(() => {
-        return Promise.all(aircrafts.map(lockheedMartin))
-            .then(ca => createdAircrafts = ca.map(a => a.body));
-    });
-    // beforeEach(() => {
-    //     return Promise.all(aircrafts.map(lockheedMartin)).then(aircraftsRes => {
-    //         createdAircrafts = aircraftsRes;
-    //     });
-    // });
 
     afterAll(() => {
         mongoose.disconnect();
     });
 
-    // alt:
-    // beforeEach(async() => {
-    //     const ca = await Promise.all(aircrafts.map(lockheedMartin));
-    //     return createdAircrafts = ca.map(a => a.body);
-    // });
 
     it('get an aircraft by id', () => {
         return request(app)
@@ -141,19 +128,37 @@ describe('Aircraft E2E test', () => {
         return request(app)
             .post('/api/aircrafts')
             .send(a10)
-            .then(res => expect(res.body).toEqual({ _id: expect.any(String), '__v': 0, ...a10 }));
+            .then(res => expect(res.body).toEqual({ _id: expect.any(String), '__v': expect.any(Number), ...a10 }));
     });
 
-    // it('updates an aircraft on put', () => {
+    it('updates an aircraft on put', () => {
 
-    //     const upgrade = { type: 'AH-65', nickname: 'Mohawk', speed: 999, released: 2020, active: true };
-    //     const expected = { ...upgrade, _id: expect.any(String) };
-    //     return request(app)
-    //         .put(`/api/aircrafts/${createdAircrafts[0]._id}`)
-    //         .send(upgrade)
-    //         .then(res => expect(res.body).toEqual(expected));
-
-    // });
+        const upgrade = {
+            name: {
+                official: 'AH-65',
+                nickname: 'Mohawk'
+            },
+            specs: {
+                type: ['helicopter', 'close air support'],
+                armament: {
+                    gun: 'M230 Chain Gun',
+                    wingtip: 2,
+                    underwing: 100
+                },
+                speed: 999
+            },
+            history: {
+                released: 2020,
+                active: true
+            }
+        };
+        
+        // const expected = { ...upgrade, _id: createdAircrafts[0]._id };
+        return request(app)
+            .put(`/api/aircrafts/${createdAircrafts[0]._id}`)
+            .send(upgrade)
+            .then(response => expect(response).toMatchObject({ ok: true }));
+    });
 
     // it('demolishes an aircraft on delete', () => {
     //     return request(app)
