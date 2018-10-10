@@ -85,19 +85,29 @@ describe('Aircraft E2E test', () => {
     });
 
 
-    it('get an aircraft by id', () => {
+    it('gets an aircraft by id on get', () => {
         return request(app)
             .get(`/api/aircrafts/${createdAircrafts[0]._id}`)
             .then(res => expect(res.body).toEqual(createdAircrafts[0]));
     });
 
-    it('gets all events on get', () => {
+    it('gets all aircrafts on get', () => {
         return request(app)
             .get('/api/aircrafts')
             .then(retrievedAircrafts => {
                 createdAircrafts.forEach(createdAircraft => {
                     expect(retrievedAircrafts.body).toContainEqual(createdAircraft);
                 });
+            });
+    });
+
+    it('gets all aircrafts on get for a specific query', () => {
+        return request(app)
+            .get('/api/aircrafts')
+            .query({ 'history.active': true })
+            .then(retrievedAircrafts => {
+                expect(retrievedAircrafts.body).toContainEqual(createdAircrafts[0]);
+                expect(retrievedAircrafts.body).toContainEqual(createdAircrafts[1]);
             });
     });
 
